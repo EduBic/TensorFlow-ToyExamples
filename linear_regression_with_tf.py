@@ -26,6 +26,8 @@ def test_dataset():
 	for sample in dataset.itertuples(index=False, name="Pandas"):
 		print(sample)
 
+
+
 # sheet = book.sheet_by_index(0)
 # data = np.asarray([sheet.row_values(i) for i in range(1, sheet.nrows)])
 # n_samples = sheet.nrows - 1
@@ -74,7 +76,7 @@ with tf.Session() as sess:
 	print()
 
 # plot the results
-# plt.plot(X, Y, 'bo', label='Real data')
-# plt.plot(X, X * w + b, 'r', label='Predicted data')
-# plt.legend()
-# plt.show()
+plt.plot(dataset['Birth_rate'], dataset['Life_expectancy'], 'bo', label="Real data")
+plt.plot(dataset['Birth_rate'], dataset['Birth_rate'] * w_out + b_out, 'r', label='Predicted data')
+plt.legend()
+plt.show()
