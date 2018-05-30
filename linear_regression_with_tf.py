@@ -27,6 +27,13 @@ def test_dataset():
 		print(sample)
 
 
+def huber_loss(labels, predictions, delta=14.0):
+	residual = tf.abs(labels - predictions)
+	def f1(): return 0.5 * tf.square(residual)
+	def f2(): return delta * residual - 0.5 * tf.square(delta)
+	
+	return tf.cond(residual < delta, f1, f2)
+
 
 # sheet = book.sheet_by_index(0)
 # data = np.asarray([sheet.row_values(i) for i in range(1, sheet.nrows)])
@@ -46,12 +53,16 @@ Y_predicted = w * X + b
 
 # Step 5: use the square error as the loss function
 loss = tf.square(Y_predicted - Y, name="loss")
+loss = huber_loss(Y, Y_predicted)
 
 
 # Step 6: using gradient descent to min loss
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001).minimize(loss)
 
+
 # Phase 2: Train our model
+writer = tf.summary.FileWriter(utils.logdir, tf.get_default_graph())
+
 print()
 with tf.Session() as sess:
 	print()
@@ -74,6 +85,8 @@ with tf.Session() as sess:
 	print("Bias:", b_out)
 
 	print()
+
+writer.close()
 
 # plot the results
 plt.plot(dataset['Birth_rate'], dataset['Life_expectancy'], 'bo', label="Real data")

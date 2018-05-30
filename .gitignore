@@ -1,2 +1,3 @@
 graphs/
 __pycache__/
+data/mnist/
